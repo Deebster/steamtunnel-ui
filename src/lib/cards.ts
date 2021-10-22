@@ -24,9 +24,10 @@ const cardPipes = {
     u: [[0, 5], [1, 2], [3, 4]],
     h: [[0, 3], [1, 5], [2, 4]],
     t: [[0, 1, 5], [2, 3, 4]],
-} as const;
+    '#': [],
+};
 
-function shuffle(ar: Array<any>) {
+function shuffle(ar: Array<unknown>) {
     // http://en.wikipedia.org/wiki/Knuth_shuffle
     for (let i = ar.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * i);
@@ -63,14 +64,14 @@ export function deal(): Board {
     return board;
 }
 
-export enum Direction {
-    Up = -width,
-    Down = width,
+export const enum Direction {
+    Up = -6, // = -width
+    Down = 6, // = width
     Left = -1,
     Right = 1,
 }
 
-export function move(start: number, direction: Direction) {
+export function move(start: number, direction: Direction): number {
     // Note that JS is weird with "modulus": -1 % 2 is -1 not 1
     // To avoid this, we add the divisor before the % operation
 
@@ -85,6 +86,5 @@ export function move(start: number, direction: Direction) {
 
         default:
             throw new Error("Unknown direction");
-
     }
 }

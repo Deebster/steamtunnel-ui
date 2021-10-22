@@ -25,6 +25,7 @@ expect.extend({
 });
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace jest {
         interface Matchers<R> {
             toHaveFourOfEach(): R;
@@ -33,12 +34,12 @@ declare global {
 }
 
 test('deck has 44 cards', () => {
-    let deck = newDeck();
+    const deck = newDeck();
     expect(deck.length).toBe(44);
 });
 
 test('deck has 44 cards', () => {
-    let deck = newDeck();
+    const deck = newDeck();
     expect(deck.length).toBe(44);
 });
 
@@ -62,24 +63,22 @@ test('board has 36 cards', () => {
     expect(deal().length).toBe(36);
 });
 
-// describe('move', () => {
 test.each([
     // trivial cases
-    [1, "Right", 2],
-    [22, "Left", 21],
-    [12, "Down", 18],
-    [12, "Up", 6],
+    [1, Direction.Right, 2],
+    [22, Direction.Left, 21],
+    [12, Direction.Down, 18],
+    [12, Direction.Up, 6],
     // literal edge cases!
-    [0, "Up", 30],
-    [30, "Down", 0],
-    [0, "Left", 5],
-    [30, "Left", 35],
-    [5, "Right", 0],
-])('moving %i,%s is %i', (start: number, dir: keyof typeof Direction, expected: number) => {
-    expect(move(start, Direction[dir])).toBe(expected);
+    [0, Direction.Up, 30],
+    [30, Direction.Down, 0],
+    [0, Direction.Left, 5],
+    [30, Direction.Left, 35],
+    [5, Direction.Right, 0],
+] as const)('moving %i,%s is %i', (start: number, dir: Direction, expected: number) => {
+    expect(move(start, dir)).toBe(expected);
 });
-// })
 
-// test('board has is half', () => {
-//     expect(deal().reduce((acc, x) => (acc + +x.rotated), 0)).toBe(25 / 2);
-// });
+test('move only accept directions', () => {
+    expect(() => move(1, 0)).toThrowError('Unknown direction');
+});
