@@ -1,9 +1,15 @@
 export type Card = 'l' | 'j' | 'k' | 'x' | 'n' | 'm' | 's' | 'z' | 'u' | 'h' | 't' | '#';
 export type Deck = Array<Card>;
+export const enum Status {
+    FaceDown,
+    FaceUp,
+    Buried,
+}
 export type Tile = {
     card: Card,
     pipes: Array<Array<number>>,
     rotated: boolean,
+    status: Status,
 }
 export type Board = Array<Tile>;
 
@@ -48,13 +54,15 @@ export function deal(): Board {
     const board: Array<Tile> = deck.slice(0, numCells - startTileIndexes.length).map((c) => ({
         card: c,
         pipes: cardPipes[c],
-        rotated: Math.random() > 0.5
+        rotated: Math.random() > 0.5,
+        status: Status.FaceDown,
     }));
 
     const startTile: Tile = {
         card: '#',
         pipes: [],
-        rotated: false
+        rotated: false,
+        status: Status.FaceUp,
     };
 
     for (const i of startTileIndexes) {
